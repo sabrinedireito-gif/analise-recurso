@@ -273,46 +273,72 @@ function addAluno(){
 
 /* ===== Visualizador da prova ===== */
 let zoom=1;
+let URLS=[];
 async function renderViewer(){
   const A=cur(),box=document.getElementById('vbox');if(!A||!box)return;
   let files=MEM[A.id]||(await idbGet(A.id));
   if(cur()!==A)return;
+  URLS.forEach(u=>URL.revokeObjectURL(u));URLS=[];
   const up=document.getElementById('vupload');
   if(!files||!files.length){
-    box.innerHTML='<div class="drop">Anexe a prova de '+esc(A.nome)+' (fotos ou PDF) e o espelho individual, se tiver.<br><label class="btn pri small">Escolher arquivos<input type="file" id="file-in" multiple accept="image/*,application/pdf"></label></div>';
+    box.innerHTML='<div class="drop">Anexe a prova de '+esc(A.nome)+' (fotos ou PDF) e o espelho individual, se tiver.<br><label class="btn pri small">Escolher arquivos<input type="file" id="file-in" multiple accept="image/*,application/pdf"></label><div id="proc" class="pg" style="margin-top:8px"></div></div>';
     up.style.display='none';return;
   }
   up.style.display='';
-  box.innerHTML='';
-  for(const f of files){
-    const url=URL.createObjectURL(f.blob);
-    if(f.type==='application/pdf'){
-      if(!window.pdfjsLib){box.insertAdjacentHTML('beforeend','<div class="pg">'+esc(f.name)+': não foi possível abrir o PDF aqui. Converta em imagens ou verifique a internet.</div>');continue;}
-      try{
-        pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        const pdf=await pdfjsLib.getDocument({data:await f.blob.arrayBuffer()}).promise;
-        for(let i=1;i<=pdf.numPages;i++){
-          const page=await pdf.getPage(i),vp=page.getViewport({scale:1.6});
-          const cv=document.createElement('canvas');cv.width=vp.width;cv.height=vp.height;
-          await page.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;
-          box.insertAdjacentHTML('beforeend','<div class="pg">'+esc(f.name)+' · página '+i+'</div>');
-          cv.style.width=(100*zoom)+'%';box.appendChild(cv);
-        }
-      }catch(e){box.insertAdjacentHTML('beforeend','<div class="pg">Não consegui abrir '+esc(f.name)+'.</div>');}
-    } else {
-      box.insertAdjacentHTML('beforeend','<div class="pg">'+esc(f.name)+'</div><img src="'+url+'" style="width:'+(100*zoom)+'%">');
+  box.innerHTML=files.map((f,i)=>{const u=URL.createObjectURL(f.blob);URLS.push(u);
+    return '<div class="pg">'+esc(f.name)+'</div><img loading="lazy" decoding="async" src="'+u+'" style="width:'+(100*zoom)+'%">';}).join('')+'<div id="proc" class="pg"></div>';
+}
+function canvasToJpeg(cv){return new Promise(res=>{try{cv.toBlob(b=>res(b),'image/jpeg',0.8);}catch(e){res(null);}});}
+function freeCanvas(cv){cv.width=0;cv.height=0;}
+async function imageToJpeg(file){
+  let src,w,h,close=()=>{};
+  try{src=await createImageBitmap(file);w=src.width;h=src.height;close=()=>src.close&&src.close();}
+  catch(e){src=await new Promise((res,rej)=>{const im=new Image();const u=URL.createObjectURL(file);im.onload=()=>{URL.revokeObjectURL(u);res(im)};im.onerror=rej;im.src=u;});w=src.naturalWidth;h=src.naturalHeight;}
+  const k=Math.min(1,1400/Math.max(w,h));
+  const cv=document.createElement('canvas');cv.width=Math.round(w*k);cv.height=Math.round(h*k);
+  cv.getContext('2d').drawImage(src,0,0,cv.width,cv.height);close();
+  const b=await canvasToJpeg(cv);freeCanvas(cv);return b;
+}
+function proc(msg){const p=document.getElementById('proc');if(p)p.textContent=msg;}
+async function pdfToJpegs(file,onPage){
+  if(!window.pdfjsLib) throw new Error('sem pdfjs');
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;
+  try{
+    for(let i=1;i<=pdf.numPages;i++){
+      proc('Preparando '+file.name+': página '+i+' de '+pdf.numPages+'…');
+      const page=await pdf.getPage(i),base=page.getViewport({scale:1});
+      const vp=page.getViewport({scale:Math.min(2,1100/base.width)});
+      const cv=document.createElement('canvas');cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);
+      const ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
+      await page.render({canvasContext:ctx,viewport:vp}).promise;
+      const b=await canvasToJpeg(cv);freeCanvas(cv);page.cleanup();
+      if(b) onPage(b,i);
     }
-  }
+  } finally {pdf.destroy();}
 }
 async function addFiles(list){
   const A=cur();if(!A||!list.length)return;
   let files=MEM[A.id]||(await idbGet(A.id))||[];
-  for(const f of list) files.push({name:f.name,type:f.type,blob:f});
+  let falhas=0;
+  for(const f of list){
+    try{
+      if(f.type==='application/pdf'||/\.pdf$/i.test(f.name)){
+        await pdfToJpegs(f,(b,i)=>files.push({name:f.name+' · pág. '+i,type:'image/jpeg',blob:b}));
+      } else {
+        proc('Preparando '+f.name+'…');
+        const b=await imageToJpeg(f);
+        files.push({name:f.name,type:'image/jpeg',blob:b||f});
+      }
+    }catch(e){falhas++;}
+  }
+  proc('');
   const ok=await idbPut(A.id,files);
   if(!ok){MEM[A.id]=files;toast('Prova anexada, mas este navegador não deixa salvar: ao recarregar, anexe de novo.',true);}
-  renderViewer();
+  if(falhas) toast('Não consegui abrir '+falhas+' arquivo(s). Tente mandar como foto.',true);
+  if(cur()===A) renderViewer();
 }
-function setZoom(z){zoom=Math.max(.6,Math.min(2.5,z));document.querySelectorAll('#vbox img,#vbox canvas').forEach(el=>el.style.width=(100*zoom)+'%');}
+function setZoom(z){zoom=Math.max(.6,Math.min(2.5,z));document.querySelectorAll('#vbox img').forEach(el=>el.style.width=(100*zoom)+'%');}
 
 /* ===== Itens ===== */
 function optLabel(c,k){
