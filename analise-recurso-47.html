@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análise de Recurso · 47º Exame · Trabalho | Master5 OAB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+:root{--navy:#15172B;--orange:#D7683D;--sky:#8896BE;--sand:#E8A062;--off:#F3F1EF;--line:#DCD8D3;--muted:#5E6070;--ok:#2F6B4F;--okbg:#E6F0EA;--warnbg:#FBEDE6}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--off);color:var(--navy);font-size:15px;line-height:1.5}
+h1,h2,h3{font-family:Georgia,"Georgia Pro","Times New Roman",serif;font-weight:700;margin:0}
+header{background:var(--navy);color:var(--off);padding:16px 0}
+.hin{max-width:1280px;margin:0 auto;padding:0 16px;display:flex;gap:12px;align-items:center}
+header h1{font-size:21px;line-height:1.2}
+header p{margin:2px 0 0;font-size:12.5px;color:#C9CCDA}
+.main{max-width:1280px;margin:0 auto;padding:14px 16px 110px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.alunos{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.alunos .chip{font:inherit;font-size:13.5px;border:1px solid var(--line);background:var(--off);border-radius:999px;padding:6px 12px;cursor:pointer;color:var(--navy)}
+.alunos .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.alunos .chip small{opacity:.75;margin-left:4px}
+.add{display:flex;gap:8px;margin-top:10px}
+.add input{flex:1}
+select,input,textarea{font:inherit;font-size:14px;border:1px solid #C9C5BF;border-radius:8px;padding:8px 10px;background:#fff;color:var(--navy);width:100%}
+textarea{min-height:70px;resize:vertical}
+.btn{font:inherit;font-weight:600;font-size:14px;border:none;border-radius:999px;padding:9px 16px;cursor:pointer;white-space:nowrap}
+.btn.pri{background:var(--orange);color:#fff}
+.btn.sec2{background:#fff;color:var(--navy);border:1px solid var(--navy)}
+.btn.small{font-size:12.5px;padding:6px 12px}
+.empty{text-align:center;color:var(--muted);padding:40px 10px}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:980px){.grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}.viewer{position:sticky;top:10px;align-self:start}}
+.viewer .vbox{height:62vh;overflow:auto;background:#E7E4E0;border-radius:10px;padding:8px}
+@media(min-width:980px){.viewer .vbox{height:calc(100vh - 150px)}}
+.viewer .vbox img,.viewer .vbox canvas{display:block;width:100%;height:auto;margin:0 auto 8px;background:#fff;border-radius:4px}
+.viewer .vbox .pg{font-size:11px;color:var(--muted);margin:2px 0 4px}
+.vtop{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.vtop h3{font-size:17px}
+.zoom{display:flex;gap:6px}
+.drop{border:2px dashed #C9C5BF;border-radius:10px;padding:26px 12px;text-align:center;color:var(--muted);font-size:14px}
+.drop label{display:inline-block;margin-top:8px}
+.drop input{display:none}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--off);padding:8px 0;display:flex;gap:8px}
+nav.tabs button{flex:1;font:inherit;font-weight:600;font-size:14px;border:1px solid var(--navy);background:#fff;color:var(--navy);border-radius:999px;padding:8px 6px;cursor:pointer}
+nav.tabs button.on{background:var(--navy);color:var(--off)}
+.sec{display:none}.sec.on{display:block}
+.gate h3{font-size:16px;margin-bottom:8px}
+.alert{border-radius:10px;padding:10px 12px;margin-top:10px;font-size:13.5px}
+.alert.bad{background:var(--warnbg);border:1px solid #EBC3B0}
+.alert.good{background:var(--okbg);border:1px solid #C2DCCD}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0}
+.card.disabled{opacity:.45;pointer-events:none}
+.card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.card h3{font-size:16px;line-height:1.3}
+.card .val{font-size:12px;color:var(--muted);white-space:nowrap;margin-top:3px}
+.qenun{font-size:13px;color:var(--muted);margin:4px 0 0}
+.badge{display:inline-block;font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;margin-top:8px}
+.badge.rec{background:var(--orange);color:#fff}
+.badge.ok{background:var(--okbg);color:var(--ok)}
+.badge.no{background:#ECEBEA;color:var(--muted)}
+.badge.pend{background:#EEF0F7;color:#4A5378}
+.crit{border-top:1px dashed var(--line);padding:10px 0 2px;margin-top:8px}
+.crit .lbl{font-weight:600;font-size:14px}
+.crit .lbl span{font-weight:500;color:var(--orange)}
+.crit .hint{font-size:12.5px;color:var(--muted);margin:2px 0 7px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font:inherit;font-size:12.5px;border:1px solid var(--line);background:var(--off);color:var(--navy);border-radius:8px;padding:6px 10px;cursor:pointer}
+.seg button.on.s-sim{background:var(--okbg);border-color:var(--ok);color:var(--ok);font-weight:600}
+.seg button.on.s-par{background:#FFF4E5;border-color:var(--sand);color:#8A4B12;font-weight:600}
+.seg button.on.s-nao{background:#ECEBEA;border-color:#9B9AA0;font-weight:600}
+.seg button.on.s-ro{background:var(--okbg);border-color:var(--ok);color:var(--ok);font-weight:600}
+.seg button.on.s-outra{background:var(--warnbg);border-color:var(--orange);color:#8A3A1A;font-weight:600}
+.note{font-size:12px;margin-top:5px;color:#8A4B12}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.row label{font-size:12.5px;font-weight:600;display:flex;flex-direction:column;gap:4px;flex:1;min-width:120px}
+.trecho{margin-top:8px;display:none}
+.trecho.show{display:block}
+.trecho .lab{font-size:12.5px;font-weight:600;display:block;margin-top:8px}
+.trecho small{display:block;color:var(--muted);font-weight:400;margin-bottom:4px}
+.score{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 12px}
+.score div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+.score b{display:block;font-family:Georgia,serif;font-size:28px;line-height:1.1}
+.score span{font-size:12px;color:var(--muted)}
+.score .pot b{color:var(--orange)}
+.verdict{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.verdict h2{font-size:19px;margin-bottom:4px}
+.verdict p{margin:6px 0;font-size:14px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.tbl th,.tbl td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left}
+.tbl th{background:var(--navy);color:#fff;font-weight:600}
+.tbl td.n{text-align:right;white-space:nowrap}
+.tbl tr.r td{background:#FDF3EE}
+.rec-item{background:#fff;border:1px solid var(--line);border-left:4px solid var(--orange);border-radius:10px;padding:12px;margin:10px 0}
+.rec-item h3{font-size:15.5px}
+.rec-item .gain{font-size:12.5px;color:var(--orange);font-weight:600;margin:2px 0 8px}
+.rec-item textarea{min-height:180px;font-size:13px;background:#FBFAF8}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.tips h3{font-size:16px;margin-bottom:6px}
+.tips ul{margin:0;padding-left:20px}.tips li{margin:4px 0;font-size:13.5px}
+.foot{font-size:12px;color:var(--muted);text-align:center;margin-top:24px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--navy);color:var(--off);padding:9px 16px;z-index:6;display:none}
+.bar.show{display:block}
+.bar .in{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13.5px}
+.bar b{color:var(--sand)}
+.bar button{font:inherit;font-weight:600;font-size:13px;background:var(--orange);color:#fff;border:none;border-radius:999px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:66px;transform:translateX(-50%);background:var(--ok);color:#fff;padding:8px 16px;border-radius:999px;font-size:13px;display:none;z-index:9;max-width:90vw;text-align:center}
+.del{color:#8A3A1A;background:none;border:none;font:inherit;font-size:12.5px;cursor:pointer;text-decoration:underline;padding:0}
+</style>
+</head>
+<body>
+<header><div class="hin">
+  <svg width="42" height="42" viewBox="0 0 64 64" aria-hidden="true">
+    <path d="M22 9c3 2 6 3 10 3s7-1 10-3" stroke="#D7683D" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M26 6c2 3 4 4 6 5M38 6c-2 3-4 4-6 5" stroke="#D7683D" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="32" cy="36" r="22" fill="#D7683D"/>
+    <path d="M22 26l20 20M42 26L22 46" stroke="#15172B" stroke-width="6" stroke-linecap="round"/>
+  </svg>
+  <div><h1>Análise de Recurso</h1><p>47º Exame · 2ª fase · Direito do Trabalho · espelho definitivo FGV · Master5 OAB</p></div>
+</div></header>
+
+<div class="main">
+  <div class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      <h3 style="font-size:17px">Alunos</h3>
+      <span style="font-size:12.5px;color:var(--muted)">Recurso: 13 a 15/11/2026</span>
+    </div>
+    <div class="alunos" id="alunos" style="margin-top:8px"></div>
+    <div class="add"><input id="novo-nome" placeholder="Nome do aluno"><button class="btn pri" id="add-aluno">Adicionar</button></div>
+  </div>
+
+  <div id="area"></div>
+  <p class="foot">Master5 OAB · @sabrinedireito. As análises e as provas ficam salvas só neste navegador.</p>
+</div>
+
+<div class="bar" id="bar"><div class="in">
+  <div><span id="bar-nome"></span> · Nota <b id="bar-atual">–</b> · Pode chegar a <b id="bar-pot">–</b></div>
+  <button id="bar-go">Ver análise</button>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== Espelho oficial: padrão de respostas definitivo FGV, 47º Exame, Direito do Trabalho ===== */
+const ARG = 'arg', ART = 'art';
+const ITEMS = [
+ {id:'p1',grupo:'peca',titulo:'1. Endereçamento',max:0.30,valores:[0,0.10,0.20,0.30],crits:[
+  {id:'a',t:ARG,v:0.10,l:'Recurso Ordinário endereçado ao Juízo da 100ª Vara do Trabalho de Curitiba/PR',h:'A folha de rosto (petição de interposição) dirigida ao juízo de 1º grau que deu a sentença.',r:'endereçou o Recurso Ordinário ao Juízo da 100ª Vara do Trabalho de Curitiba/PR'},
+  {id:'b',t:ARG,v:0.10,l:'Razões recursais dirigidas ao TRT',h:'A folha de razões endereçada ao Tribunal Regional do Trabalho (9ª Região).',r:'dirigiu as razões recursais ao Tribunal Regional do Trabalho'},
+  {id:'c',t:ART,v:0.10,l:'Indicação do art. 895, I, da CLT',h:'Na abertura da peça, como fundamento do cabimento.',r:'indicou o art. 895, I, da CLT como fundamento do recurso'}]},
+ {id:'p2',grupo:'peca',titulo:'2. Partes',max:0.20,valores:[0,0.10,0.20],crits:[
+  {id:'a',t:ARG,v:0.10,l:'Recorrente: Romildo Luiz Silva',h:'Indicou o nome do recorrente.',r:'indicou o recorrente, Romildo Luiz Silva'},
+  {id:'b',t:ARG,v:0.10,l:'Recorrida: Metalúrgica Paranaense Ltda.',h:'Indicou o nome da recorrida.',r:'indicou a recorrida, Metalúrgica Paranaense Ltda.'}]},
+ {id:'p3',grupo:'peca',titulo:'3. Tempestividade',max:0.20,valores:[0,0.10,0.20],crits:[
+  {id:'a',t:ARG,v:0.10,l:'Recurso tempestivo, dentro do prazo de 8 dias',h:'Disse que o recurso é tempestivo porque interposto dentro do prazo de 8 dias úteis (a sentença foi publicada há 6 dias úteis).',r:'demonstrou a tempestividade do recurso, interposto dentro do prazo legal de 8 dias úteis'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Indicação do art. 895, I, da CLT na tempestividade',h:'Citou o artigo ao falar do prazo.',r:'indicou o art. 895, I, da CLT ao tratar do prazo recursal'}]},
+ {id:'p4',grupo:'peca',titulo:'4. Retificação da CTPS',max:0.50,valores:[0,0.40,0.50],crits:[
+  {id:'a',t:ARG,v:0.40,l:'O atraso na entrega da CTPS não exonera a empregadora do correto registro',h:'Explicou por que a sentença deve ser reformada: a demora do empregado em entregar a carteira não tira da empresa o dever de registrar a data real de admissão (1º/02/2022).',r:'sustentou que o eventual atraso na entrega da CTPS não exonera a empregadora do dever de proceder ao correto registro do contrato'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Indicação do art. 29 da CLT',h:'Só conta junto com o argumento acima.',r:'indicou o art. 29 da CLT'}]},
+ {id:'p5',grupo:'peca',titulo:'5. Danos materiais (PAIR)',max:0.60,valores:[0,0.50,0.60],crits:[
+  {id:'a',t:ARG,v:0.50,l:'Redução da capacidade laboral basta para o dano material',h:'Explicou que, mesmo apto para outras funções, a perda auditiva reduziu a capacidade para a função de soldador, o que já gera indenização (valor único ou pensão).',r:'sustentou que a redução da capacidade laboral para a função habitualmente exercida é suficiente para configurar o dano material, ainda que o trabalhador permaneça apto para outras atividades'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Indicação do art. 950 do Código Civil',h:'Só conta junto com o argumento.',r:'indicou o art. 950 do Código Civil'}]},
+ {id:'p6',grupo:'peca',titulo:'6. Horas extras e adicional noturno',max:1.00,valores:[0,0.40,0.50,0.60,0.90,1.00],crits:[
+  {id:'a',t:ARG,v:0.50,l:'Horas extras: cartões de ponto inválidos, como provado pelas testemunhas',h:'Atacou os controles de jornada e disse que a prova testemunhal (horas pagas "por fora", ponto britânico) deve prevalecer.',r:'impugnou os controles de jornada, sustentando a invalidade dos cartões de ponto, demonstrada pela prova testemunhal, e requereu a reforma quanto às horas extras'},
+  {id:'b',t:ARG,v:0.40,l:'Adicional noturno: mesmo argumento da invalidade dos cartões',h:'Pediu a reforma também quanto ao trabalho noturno, pela invalidade dos cartões comprovada por testemunhas.',r:'requereu a reforma quanto ao adicional noturno, igualmente em razão da invalidade dos cartões de ponto comprovada pela prova testemunhal'},
+  {id:'c',t:ART,v:0.10,reqAny:['a','b'],l:'Art. 818 da CLT, ou art. 373, I, do CPC, ou Súmula 338, II, do TST',h:'Qualquer um dos três vale. Conta junto com pelo menos um dos argumentos acima.',r:'indicou o fundamento legal exigido (art. 818 da CLT / art. 373, I, do CPC / Súmula 338, II, do TST)'}]},
+ {id:'p7',grupo:'peca',titulo:'7. Licença médica de 15 dias',max:0.60,valores:[0,0.50,0.60],crits:[
+  {id:'a',t:ARG,v:0.50,l:'Interrupção do contrato: os 15 primeiros dias são pagos pelo empregador',h:'Explicou que o afastamento de até 15 dias é hipótese de interrupção, com salário a cargo da empresa, e que cláusula contratual não afasta isso.',r:'sustentou que o afastamento de até 15 dias configura interrupção do contrato de trabalho, sendo a remuneração do período de responsabilidade do empregador'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Indicação do art. 60, § 3º, da Lei 8.213/1991',h:'Só conta junto com o argumento.',r:'indicou o art. 60, § 3º, da Lei nº 8.213/1991'}]},
+ {id:'p8',grupo:'peca',titulo:'8. Equiparação salarial',max:0.60,valores:[0,0.50,0.60],crits:[
+  {id:'a',t:ARG,v:0.50,l:'O ônus de provar diferença de produtividade e perfeição técnica é da Reclamada',h:'Disse que é fato impeditivo, alegado pela empresa, então a prova cabia a ela, e não ao Romildo.',r:'sustentou que o ônus da prova da diferença de produtividade e perfeição técnica, fato impeditivo alegado pela defesa, é da Reclamada'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Art. 818, II, da CLT, ou art. 373, II, do CPC, ou Súmula 6, VIII, do TST',h:'Qualquer um dos três vale. Só conta junto com o argumento.',r:'indicou o fundamento exigido (art. 818, II, da CLT / art. 373, II, do CPC / Súmula 6, VIII, do TST)'}]},
+ {id:'p9',grupo:'peca',titulo:'9. Adicional de periculosidade',max:0.50,valores:[0,0.40,0.50],crits:[
+  {id:'a',t:ARG,v:0.40,l:'Exposição intermitente também gera direito ao adicional',h:'Explicou que não precisa ser trabalho exclusivo com eletricidade: o contato intermitente já dá direito.',r:'sustentou que a exposição intermitente ao risco gera direito ao adicional de periculosidade'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Art. 193, I, da CLT, ou Súmula 364, I, do TST',h:'Qualquer um dos dois vale. Só conta junto com o argumento.',r:'indicou o art. 193, I, da CLT / a Súmula 364, I, do TST'}]},
+ {id:'p10',grupo:'peca',titulo:'10. Pedidos finais',max:0.20,valores:[0,0.10,0.20],crits:[
+  {id:'a',t:ARG,v:0.10,l:'Pedido de conhecimento do recurso',h:'',r:'requereu o conhecimento do recurso'},
+  {id:'b',t:ARG,v:0.10,l:'Pedido de provimento, para reformar a sentença nos pontos impugnados',h:'',r:'requereu o provimento do Recurso Ordinário para reforma da sentença nos pontos impugnados'}]},
+ {id:'p11',grupo:'peca',titulo:'11. Honorários advocatícios',max:0.20,valores:[0,0.10,0.20],crits:[
+  {id:'a',t:ARG,v:0.10,l:'Pedido de condenação da Reclamada em honorários',h:'',r:'requereu a condenação da Reclamada ao pagamento de honorários advocatícios'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Indicação do art. 791-A da CLT',h:'Só conta junto com o pedido.',r:'indicou o art. 791-A da CLT'}]},
+ {id:'p12',grupo:'peca',titulo:'12. Encerramento',max:0.10,valores:[0,0.10],crits:[
+  {id:'a',t:ARG,v:0.10,l:'Local, data, advogado(a) e OAB',h:'Sem inventar nome ou número: "Advogado(a)... OAB..."',r:'procedeu ao encerramento da peça com local, data, advogado(a) e OAB'}]},
+
+ {id:'q1a',grupo:'quest',titulo:'Questão 1 · A',enun:'Responsabilidade do sócio retirante Gabriel.',max:0.65,valores:[0,0.55,0.65],crits:[
+  {id:'a',t:ARG,v:0.55,l:'Sim, é possível responsabilizar Gabriel, porque não esgotado o prazo de 2 anos',h:'Disse que sim e explicou: o sócio retirante responde (de forma subsidiária) pelo período em que foi sócio, se a ação for ajuizada até 2 anos depois de averbada a saída.',r:'respondeu que é possível responsabilizar o sócio retirante, porque não esgotado o prazo legal de 2 anos'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Art. 10-A da CLT ou art. 1.032 do CC',h:'Qualquer um dos dois. Só conta junto com o argumento.',r:'indicou o art. 10-A da CLT / art. 1.032 do Código Civil'}]},
+ {id:'q1b',grupo:'quest',titulo:'Questão 1 · B',enun:'Recurso contra a decisão que julga improcedente o IDPJ.',max:0.60,valores:[0,0.50,0.60],crits:[
+  {id:'a',t:ARG,v:0.50,l:'Agravo de Petição',h:'Indicou o agravo de petição e justificou (decisão proferida na fase de execução).',r:'indicou o Agravo de Petição como recurso cabível'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Art. 897, "a", ou art. 855-A, § 1º, II, da CLT',h:'Qualquer um dos dois. Só conta junto com o argumento.',r:'indicou o art. 897, alínea "a" / art. 855-A, § 1º, II, da CLT'}]},
+ {id:'q2a',grupo:'quest',titulo:'Questão 2 · A',enun:'Responsabilidade da tomadora Comercial Nova Aurora.',max:0.65,valores:[0,0.30,0.40,0.55,0.65],crits:[
+  {id:'a',t:ARG,v:0.30,l:'Sim, responsabilidade subsidiária da tomadora',h:'Falou em responsabilidade SUBSIDIÁRIA (se escreveu "solidária", não conta).',r:'reconheceu a responsabilidade subsidiária da tomadora dos serviços'},
+  {id:'b',t:ARG,v:0.25,req:['a'],l:'Abrange todas as verbas do período da prestação de serviços',h:'Disse a medida: todas as verbas referentes ao período em que Berenice trabalhou para a tomadora.',r:'esclareceu que a responsabilidade abrange todas as verbas do período da prestação de serviços'},
+  {id:'c',t:ART,v:0.10,req:['a'],l:'Súmula 331, IV e VI, do TST ou art. 5º-A, § 5º, da Lei 6.019/1974',h:'Qualquer um dos dois.',r:'indicou a Súmula 331, IV e VI, do TST / o art. 5º-A, § 5º, da Lei nº 6.019/1974'}]},
+ {id:'q2b',grupo:'quest',titulo:'Questão 2 · B',enun:'Depósito recursal da empresa em recuperação judicial.',max:0.60,valores:[0,0.50,0.60],crits:[
+  {id:'a',t:ARG,v:0.50,l:'Não: empresa em recuperação judicial é isenta do depósito recursal',h:'',r:'respondeu que a empresa em recuperação judicial é isenta do depósito recursal'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Art. 899, § 10, da CLT',h:'Só conta junto com o argumento.',r:'indicou o art. 899, § 10, da CLT'}]},
+ {id:'q3a',grupo:'quest',titulo:'Questão 3 · A',enun:'Desconto dos dias de greve.',max:0.65,valores:[0,0.55,0.65],crits:[
+  {id:'a',t:ARG,v:0.55,l:'Sim, é lícito, porque a greve suspende o contrato de trabalho',h:'O ponto que pontua é a SUSPENSÃO do contrato.',r:'respondeu que o desconto é lícito porque a greve suspende o contrato de trabalho'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Art. 7º da Lei 7.783/1989',h:'Só conta junto com o argumento.',r:'indicou o art. 7º da Lei nº 7.783/1989'}]},
+ {id:'q3b',grupo:'quest',titulo:'Questão 3 · B',enun:'Legitimidade para o dissídio coletivo de greve em atividade essencial.',max:0.60,valores:[0,0.50,0.60],crits:[
+  {id:'a',t:ARG,v:0.50,l:'Ministério Público do Trabalho',h:'Indicou o MPT, por ser atividade essencial com lesão ao interesse público.',r:'indicou o Ministério Público do Trabalho como legitimado para ajuizar o dissídio coletivo de greve em atividade essencial'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Art. 114, § 3º, da CF, ou art. 8º da Lei 7.783/89, ou art. 856 da CLT, ou art. 83, VIII, da LC 75/93',h:'Qualquer um dos quatro vale.',r:'indicou o fundamento exigido (art. 114, § 3º, da CF / art. 8º da Lei nº 7.783/1989 / art. 856 da CLT / art. 83, VIII, da LC 75/93)'}]},
+ {id:'q4a',grupo:'quest',titulo:'Questão 4 · A',enun:'Jornada da gerente de relacionamento bancária.',max:0.65,valores:[0,0.55,0.65],crits:[
+  {id:'a',t:ARG,v:0.55,l:'Jornada de 6 horas, porque não estava configurado o cargo de confiança bancário',h:'Explicou que só a gratificação não basta: ela não tinha poderes de mando, gestão ou fiscalização.',r:'respondeu que a empregada estava sujeita à jornada de seis horas, por não estar configurado o cargo de confiança bancário'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Art. 224, caput ou § 2º, da CLT, ou Súmula 102, I, do TST',h:'Qualquer um vale.',r:'indicou o art. 224 da CLT / a Súmula 102, I, do TST'}]},
+ {id:'q4b',grupo:'quest',titulo:'Questão 4 · B',enun:'Requisito específico do recurso de revista.',max:0.60,valores:[0,0.50,0.60],crits:[
+  {id:'a',t:ARG,v:0.50,l:'Transcendência da causa',h:'Econômica, política, social ou jurídica.',r:'indicou a necessidade de demonstração da transcendência da causa'},
+  {id:'b',t:ART,v:0.10,req:['a'],l:'Art. 896-A da CLT',h:'Só conta junto com o argumento.',r:'indicou o art. 896-A da CLT'}]}
+];
+
+
+
+/* ===== Estado (localStorage) ===== */
+const KEY='analise-recurso-47-trab';
+let DB={alunos:[],atual:null};
+try{const raw=localStorage.getItem(KEY); if(raw) DB=Object.assign(DB,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}}
+function cur(){return DB.alunos.find(a=>a.id===DB.atual)||null;}
+let TAB='peca';
+
+/* ===== Provas (IndexedDB) ===== */
+let idb=null;
+function openIDB(){return new Promise(res=>{try{const r=indexedDB.open('analise-recurso-47',1);r.onupgradeneeded=()=>r.result.createObjectStore('provas');r.onsuccess=()=>{idb=r.result;res(idb)};r.onerror=()=>res(null);}catch(e){res(null)}});}
+function idbGet(id){return new Promise(res=>{if(!idb)return res(null);try{const q=idb.transaction('provas').objectStore('provas').get(id);q.onsuccess=()=>res(q.result||null);q.onerror=()=>res(null);}catch(e){res(null)}});}
+function idbPut(id,v){return new Promise(res=>{if(!idb)return res(false);try{const t=idb.transaction('provas','readwrite');t.objectStore('provas').put(v,id);t.oncomplete=()=>res(true);t.onerror=()=>res(false);}catch(e){res(false)}});}
+function idbDel(id){try{if(idb)idb.transaction('provas','readwrite').objectStore('provas').delete(id);}catch(e){}}
+const MEM={}; // fallback se IndexedDB indisponível
+
+const fmt=n=>n.toFixed(2).replace('.',',');
+const r2=n=>Math.round(n*100)/100;
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+
+/* ===== Cálculo ===== */
+function critCounts(A,it,c){
+  if(A.c[it.id+'.'+c.id]!=='sim') return false;
+  if(c.req && !c.req.every(x=>A.c[it.id+'.'+x]==='sim')) return false;
+  if(c.reqAny && !c.reqAny.some(x=>A.c[it.id+'.'+x]==='sim')) return false;
+  return true;
+}
+const pecaZerada=(A,it)=>it.grupo==='peca'&&A.gate==='outra';
+function potencial(A,it){if(pecaZerada(A,it))return 0;return r2(Math.min(it.max,it.crits.reduce((s,c)=>s+(critCounts(A,it,c)?c.v:0),0)));}
+const filled=(A,it)=>it.crits.every(c=>A.c[it.id+'.'+c.id]);
+function recebida(A,it){const v=A.nota[it.id];return(v===undefined||v===''||v===null)?null:parseFloat(v);}
+function status(A,it){
+  const rec=recebida(A,it);
+  if(pecaZerada(A,it)) return rec===null?'pend':'zero';
+  if(!filled(A,it)||rec===null) return 'pend';
+  const p=potencial(A,it);
+  return p>rec+0.001?'rec':(p<rec-0.001?'acima':'ok');
+}
+function totals(A){
+  let atual=0,pot=0,pend=0;
+  ITEMS.forEach(it=>{const rec=recebida(A,it);if(rec===null){pend++;return;}atual+=rec;pot+=status(A,it)==='rec'?potencial(A,it):rec;});
+  return{atual:r2(atual),pot:r2(pot),pend};
+}
+
+/* ===== Alunos ===== */
+function renderAlunos(){
+  const el=document.getElementById('alunos');
+  if(!DB.alunos.length){el.innerHTML='<span style="font-size:13.5px;color:var(--muted)">Nenhum aluno ainda. Adicione o primeiro abaixo.</span>';return;}
+  el.innerHTML=DB.alunos.map(a=>{const t=totals(a);const rec=ITEMS.filter(it=>status(a,it)==='rec').length;
+    return '<button class="chip'+(a.id===DB.atual?' on':'')+'" data-aluno="'+a.id+'">'+esc(a.nome)+(t.pend<ITEMS.length?'<small>'+fmt(t.atual)+(rec?' · '+rec+' rec.':'')+'</small>':'')+'</button>';}).join('');
+}
+function addAluno(){
+  const inp=document.getElementById('novo-nome'),nome=inp.value.trim();
+  if(!nome){inp.focus();return;}
+  const a={id:'a'+Date.now(),nome,gate:null,c:{},nota:{},pag:{},lin:{},trecho:{},obs:''};
+  DB.alunos.push(a);DB.atual=a.id;save();inp.value='';TAB='peca';renderAll();
+}
+
+/* ===== Visualizador da prova ===== */
+let zoom=1;
+async function renderViewer(){
+  const A=cur(),box=document.getElementById('vbox');if(!A||!box)return;
+  let files=MEM[A.id]||(await idbGet(A.id));
+  if(cur()!==A)return;
+  const up=document.getElementById('vupload');
+  if(!files||!files.length){
+    box.innerHTML='<div class="drop">Anexe a prova de '+esc(A.nome)+' (fotos ou PDF) e o espelho individual, se tiver.<br><label class="btn pri small">Escolher arquivos<input type="file" id="file-in" multiple accept="image/*,application/pdf"></label></div>';
+    up.style.display='none';return;
+  }
+  up.style.display='';
+  box.innerHTML='';
+  for(const f of files){
+    const url=URL.createObjectURL(f.blob);
+    if(f.type==='application/pdf'){
+      if(!window.pdfjsLib){box.insertAdjacentHTML('beforeend','<div class="pg">'+esc(f.name)+': não foi possível abrir o PDF aqui. Converta em imagens ou verifique a internet.</div>');continue;}
+      try{
+        pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const pdf=await pdfjsLib.getDocument({data:await f.blob.arrayBuffer()}).promise;
+        for(let i=1;i<=pdf.numPages;i++){
+          const page=await pdf.getPage(i),vp=page.getViewport({scale:1.6});
+          const cv=document.createElement('canvas');cv.width=vp.width;cv.height=vp.height;
+          await page.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;
+          box.insertAdjacentHTML('beforeend','<div class="pg">'+esc(f.name)+' · página '+i+'</div>');
+          cv.style.width=(100*zoom)+'%';box.appendChild(cv);
+        }
+      }catch(e){box.insertAdjacentHTML('beforeend','<div class="pg">Não consegui abrir '+esc(f.name)+'.</div>');}
+    } else {
+      box.insertAdjacentHTML('beforeend','<div class="pg">'+esc(f.name)+'</div><img src="'+url+'" style="width:'+(100*zoom)+'%">');
+    }
+  }
+}
+async function addFiles(list){
+  const A=cur();if(!A||!list.length)return;
+  let files=MEM[A.id]||(await idbGet(A.id))||[];
+  for(const f of list) files.push({name:f.name,type:f.type,blob:f});
+  const ok=await idbPut(A.id,files);
+  if(!ok){MEM[A.id]=files;toast('Prova anexada, mas este navegador não deixa salvar: ao recarregar, anexe de novo.',true);}
+  renderViewer();
+}
+function setZoom(z){zoom=Math.max(.6,Math.min(2.5,z));document.querySelectorAll('#vbox img,#vbox canvas').forEach(el=>el.style.width=(100*zoom)+'%');}
+
+/* ===== Itens ===== */
+function optLabel(c,k){
+  if(c.t===ART) return{sim:'Citou corretamente',nao:'Não citou ou citou outro'}[k];
+  return{sim:'Escreveu e explicou',par:'Só mencionou, sem explicar',nao:'Não escreveu'}[k];
+}
+function itemHTML(A,it){
+  let h='<div class="card" id="card-'+it.id+'"><div class="card-top"><div><h3>'+it.titulo+'</h3>'+(it.enun?'<div class="qenun">'+it.enun+'</div>':'')+'</div><div class="val">vale '+fmt(it.max)+'</div></div><div class="badge-slot"></div>';
+  it.crits.forEach(c=>{
+    const k=it.id+'.'+c.id,opts=c.t===ART?['sim','nao']:['sim','par','nao'];
+    h+='<div class="crit"><div class="lbl">'+c.l+' <span>('+fmt(c.v)+')</span></div><div class="hint">'+(c.h||'')+'</div><div class="seg">'+
+       opts.map(o=>'<button data-k="'+k+'" data-o="'+o+'" class="s-'+o+(A.c[k]===o?' on':'')+'">'+optLabel(c,o)+'</button>').join('')+'</div><div class="note" id="note-'+it.id+'-'+c.id+'"></div></div>';
+  });
+  h+='<div class="row"><label>Nota que a FGV deu<select data-nota="'+it.id+'"><option value="">Selecione</option>'+
+     it.valores.map(v=>'<option value="'+v+'"'+(String(A.nota[it.id])===String(v)?' selected':'')+'>'+fmt(v)+'</option>').join('')+'</select></label></div>';
+  h+='<div class="trecho" id="tr-'+it.id+'"><div class="row" style="border-top:none;margin-top:0;padding-top:0">'+
+     '<label>Página<input data-pag="'+it.id+'" inputmode="numeric" value="'+esc(A.pag[it.id]||'')+'" placeholder="ex.: 2"></label>'+
+     '<label>Linhas<input data-lin="'+it.id+'" value="'+esc(A.lin[it.id]||'')+'" placeholder="ex.: 14 a 22"></label></div>'+
+     '<span class="lab">Trecho que o aluno escreveu<small>Transcreva da prova. Entra no texto do recurso.</small></span><textarea data-tr="'+it.id+'">'+esc(A.trecho[it.id]||'')+'</textarea></div></div>';
+  return h;
+}
+function updateItem(A,it){
+  const card=document.getElementById('card-'+it.id);if(!card)return;
+  const z=pecaZerada(A,it);
+  card.querySelectorAll('.crit').forEach(c=>c.style.opacity=z?.4:1);
+  card.querySelectorAll('.crit button').forEach(b=>b.disabled=z);
+  const st=status(A,it),p=potencial(A,it),rec=recebida(A,it),slot=card.querySelector('.badge-slot');
+  slot.innerHTML={pend:'<span class="badge pend">Pendente</span>',
+    rec:'<span class="badge rec">Vale recorrer · +'+(rec!==null?fmt(r2(p-rec)):'')+'</span>',
+    ok:'<span class="badge ok">Nota condiz com a prova</span>',
+    acima:'<span class="badge no">Não cabe recurso</span>',
+    zero:'<span class="badge no">Peça inadequada: zerada</span>'}[st];
+  it.crits.forEach(c=>{
+    const n=document.getElementById('note-'+it.id+'-'+c.id),s=A.c[it.id+'.'+c.id];let m='';
+    if(s==='par')m='Mera menção não pontua: esse critério não entra no recurso.';
+    else if(s==='sim'&&!critCounts(A,it,c))m='O fundamento só pontua junto com o argumento, que não foi desenvolvido.';
+    n.textContent=m;
+  });
+  document.getElementById('tr-'+it.id).classList.toggle('show',st==='rec');
+}
+
+/* ===== Textos ===== */
+function nomeItem(it){
+  if(it.grupo==='peca'){const m=it.titulo.match(/^(\d+)\.\s*(.*)$/);return 'item '+m[1]+' ('+m[2]+') da peça profissional';}
+  const m=it.titulo.match(/Questão (\d) · ([AB])/);return 'item '+m[2]+' da Questão '+m[1];
+}
+function recText(A,it){
+  const p=potencial(A,it),rec=recebida(A,it),ok=it.crits.filter(c=>critCounts(A,it,c));
+  const local='na página '+(A.pag[it.id]||'__')+', linhas '+(A.lin[it.id]||'__')+',';
+  let t='Prezada Banca Examinadora,\n\nO(a) examinando(a) requer a revisão da nota atribuída ao '+nomeItem(it)+', que recebeu '+fmt(rec)+' de '+fmt(it.max)+' pontos.\n\n';
+  t+='Conforme o padrão de respostas definitivo, o item exige: '+ok.map(c=>c.l.charAt(0).toLowerCase()+c.l.slice(1)+' ('+fmt(c.v)+')').join('; ')+'.\n\n';
+  t+='Na resposta, '+local+' o(a) examinando(a) '+ok.map(c=>c.r).join('; e ')+'.';
+  const tr=(A.trecho[it.id]||'').trim();if(tr)t+=' É o que se extrai do seguinte trecho: "'+tr+'".';
+  t+='\n\nA resposta, portanto, contempla o conteúdo exigido no padrão de respostas, com o desenvolvimento do raciocínio jurídico e a indicação do fundamento legal, e não apenas a menção ao dispositivo.\n\nDiante do exposto, requer a majoração da nota do item para '+fmt(p)+' pontos.';
+  return t;
+}
+function msgAluno(A){
+  const t=totals(A),recs=ITEMS.filter(it=>status(A,it)==='rec'),primeiro=A.nome.split(' ')[0];
+  let m='Oi, '+primeiro+'! Analisei a sua prova item por item com o espelho definitivo da FGV.\n\n';
+  m+='Sua nota no resultado preliminar: '+fmt(t.atual)+'.\n';
+  if(A.gate==='outra') m+='Como a peça cobrada era o Recurso Ordinário, a FGV zera a peça inteira quando a peça é outra, e nessa parte não há como recorrer.\n';
+  if(recs.length){
+    m+='Encontrei '+recs.length+' ite'+(recs.length>1?'ns':'m')+' em que você escreveu o que o espelho pede e não recebeu a pontuação. Se a banca aceitar, sua nota pode chegar a '+fmt(t.pot)+'.\n\n';
+    recs.forEach(it=>m+='• '+(it.grupo==='peca'?'Peça, ':'')+it.titulo+': de '+fmt(recebida(A,it))+' para '+fmt(potencial(A,it))+'\n');
+    m+='\n'+(t.atual<6&&t.pot>=6?'Vale muito a pena recorrer, porque esses pontos te levam aos 6,00.':t.atual>=6?'Você já está aprovado(a), e o recurso só aumenta a sua margem.':'Mesmo com tudo aceito, a nota fica abaixo de 6,00. Você pode recorrer, mas já vamos pensando na repescagem com calma.')+'\n\n';
+    m+='Abaixo seguem os textos de cada recurso. Confira a página e as linhas antes de colar no sistema da FGV, faça um recurso por item e não coloque seu nome em nenhum lugar.\n\n';
+    recs.forEach(it=>m+='===== '+(it.grupo==='peca'?'PEÇA · ':'')+it.titulo.toUpperCase()+' =====\n\n'+recText(A,it)+'\n\n');
+  } else {
+    m+='\nPelo que analisei, a nota que você recebeu bate com o que está escrito na prova, então não encontrei item com fundamento para recurso. Eu sei que dói, mas agora você sabe exatamente onde estão os pontos que faltaram, e isso vale ouro para a repescagem.\n';
+  }
+  if((A.obs||'').trim()) m+='\n'+A.obs.trim()+'\n';
+  m+='\nQualquer dúvida, me chama.\nSa';
+  return m;
+}
+
+/* ===== Área do aluno ===== */
+function renderArea(){
+  const A=cur(),area=document.getElementById('area'),bar=document.getElementById('bar');
+  if(!A){area.innerHTML='<div class="panel empty">Adicione um aluno para começar a análise.</div>';bar.classList.remove('show');return;}
+  bar.classList.add('show');document.getElementById('bar-nome').textContent=A.nome;
+  area.innerHTML='<div class="grid"><div class="viewer panel"><div class="vtop"><h3>Prova de '+esc(A.nome)+'</h3><div class="zoom">'+
+    '<button class="btn sec2 small" data-zoom="-">−</button><button class="btn sec2 small" data-zoom="+">+</button>'+
+    '<span id="vupload"><label class="btn sec2 small">Anexar mais<input type="file" id="file-in2" multiple accept="image/*,application/pdf" style="display:none"></label> <button class="btn sec2 small" id="limpar-prova">Remover prova</button></span></div></div>'+
+    '<div class="vbox" id="vbox"></div></div>'+
+    '<div><nav class="tabs"><button data-tab="peca">Peça</button><button data-tab="quest">Questões</button><button data-tab="res">Análise</button></nav>'+
+    '<div id="sec-peca" class="sec"></div><div id="sec-quest" class="sec"></div><div id="sec-res" class="sec"></div></div></div>';
+  const P=document.getElementById('sec-peca'),Q=document.getElementById('sec-quest');
+  P.innerHTML='<div class="panel gate"><h3>Qual peça o aluno fez?</h3><div class="seg"><button data-gate="ro" class="s-ro'+(A.gate==='ro'?' on':'')+'">Recurso Ordinário</button><button data-gate="outra" class="s-outra'+(A.gate==='outra'?' on':'')+'">Outra peça</button></div><div id="gate-msg"></div></div>'+
+    ITEMS.filter(i=>i.grupo==='peca').map(it=>itemHTML(A,it)).join('');
+  Q.innerHTML=ITEMS.filter(i=>i.grupo==='quest').map(it=>itemHTML(A,it)).join('');
+  setTab(TAB,false);
+  updateAll();renderViewer();
+}
+function setTab(t,scroll){
+  TAB=t;
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id==='sec-'+t));
+  if(scroll){const n=document.querySelector('nav.tabs');if(n)window.scrollTo({top:n.getBoundingClientRect().top+window.scrollY-6,behavior:'smooth'});}
+}
+function renderRes(){
+  const A=cur(),R=document.getElementById('sec-res');if(!A||!R)return;
+  const t=totals(A),recs=ITEMS.filter(it=>status(A,it)==='rec');
+  let h='<div class="score"><div><b>'+fmt(t.atual)+'</b><span>nota do resultado preliminar</span></div><div class="pot"><b>'+fmt(t.pot)+'</b><span>nota possível com recurso</span></div></div>';
+  let v;
+  if(t.pend>0) v='<h2>Faltam '+t.pend+' ite'+(t.pend>1?'ns':'m')+'</h2><p style="color:var(--muted)">Pendentes: '+ITEMS.filter(it=>status(A,it)==='pend').map(it=>it.titulo).join(', ')+'.</p>';
+  else if(t.atual>=6) v='<h2>Já aprovado(a)</h2><p>Com '+fmt(t.atual)+', já passou. '+(recs.length?'O recurso só aumenta a margem.':'')+'</p>';
+  else if(t.pot>=6) v='<h2>O recurso pode aprovar</h2><p>Os itens abaixo somam +'+fmt(r2(t.pot-t.atual))+' e levam a nota a '+fmt(t.pot)+'.</p>';
+  else if(recs.length) v='<h2>Cabe recurso, mas não alcança 6,00</h2><p>Mesmo com tudo aceito, a nota chega a '+fmt(t.pot)+'.</p>';
+  else v='<h2>Sem fundamento para recurso</h2><p>A nota dada condiz com o que está na prova.</p>';
+  h+='<div class="verdict">'+v+'</div>';
+  h+='<table class="tbl"><tr><th>Item</th><th class="n">FGV</th><th class="n">Possível</th></tr>'+ITEMS.map(it=>{const st=status(A,it),rec=recebida(A,it);
+     return '<tr class="'+(st==='rec'?'r':'')+'"><td>'+(it.grupo==='peca'?'Peça '+it.titulo:it.titulo)+'</td><td class="n">'+(rec===null?'–':fmt(rec))+'</td><td class="n">'+(st==='pend'?'–':st==='rec'?'<b style="color:var(--orange)">'+fmt(potencial(A,it))+'</b>':fmt(rec))+'</td></tr>';}).join('')+'</table>';
+  if(recs.length){
+    h+='<h2 style="font-size:19px;margin:16px 0 2px">Textos de recurso ('+recs.length+')</h2>';
+    recs.forEach(it=>{h+='<div class="rec-item"><h3>'+(it.grupo==='peca'?'Peça · ':'')+it.titulo+'</h3><div class="gain">de '+fmt(recebida(A,it))+' para '+fmt(potencial(A,it))+' · +'+fmt(r2(potencial(A,it)-recebida(A,it)))+'</div><textarea id="txt-'+it.id+'">'+esc(recText(A,it))+'</textarea><div class="btns"><button class="btn pri small" data-copy="'+it.id+'">Copiar</button></div></div>';});
+  }
+  h+='<div class="panel tips" style="margin-top:14px"><h3>Mensagem para o aluno</h3><p style="font-size:13px;color:var(--muted);margin:0 0 6px">Resumo da análise com todos os textos de recurso, pronto para colar no WhatsApp. Se quiser, escreva um recado seu para ir no final.</p>'+
+     '<textarea id="obs" placeholder="Recado seu (opcional)">'+esc(A.obs||'')+'</textarea><div class="btns"><button class="btn pri" id="copy-msg">Copiar mensagem para o aluno</button></div></div>';
+  h+='<div class="panel tips"><h3>Orientações que vão na mensagem</h3><ul><li>Um recurso por item, no campo certo do sistema da FGV.</li><li>Sem nome, assinatura ou inscrição no texto: recurso identificado é indeferido.</li><li>Conferir página e linhas antes de enviar.</li></ul>'+
+     '<div class="btns"><button class="del" id="del-aluno">Excluir este aluno</button></div></div>';
+  R.innerHTML=h;
+}
+function updateAll(){
+  const A=cur();if(!A)return;
+  ITEMS.forEach(it=>updateItem(A,it));
+  const t=totals(A),none=t.pend===ITEMS.length;
+  document.getElementById('bar-atual').textContent=none?'–':fmt(t.atual);
+  document.getElementById('bar-pot').textContent=none?'–':fmt(t.pot);
+  const gm=document.getElementById('gate-msg');
+  if(gm) gm.innerHTML=A.gate==='outra'?'<div class="alert bad">A peça cobrada foi o Recurso Ordinário. Peça inadequada zera a peça inteira, então só informe as notas da peça (devem estar 0,00) e siga para as questões.</div>':A.gate==='ro'?'<div class="alert good">Peça correta. Siga item por item.</div>':'';
+  renderRes();renderAlunos();
+}
+function renderAll(){renderAlunos();renderArea();}
+
+/* ===== Utilidades ===== */
+function toast(msg,bad){const t=document.getElementById('toast');t.textContent=msg;t.style.background=bad?'#8A4B12':'';t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2600);}
+function copyText(txt){
+  const fb=()=>{const el=document.createElement('textarea');el.value=txt;el.style.position='fixed';el.style.opacity='0';document.body.appendChild(el);el.focus();el.select();let ok=false;try{ok=document.execCommand('copy');}catch(e){}el.remove();toast(ok?'Copiado':'Não deu para copiar. Selecione o texto manualmente.',!ok);};
+  try{if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(txt).then(()=>toast('Copiado'),fb);else fb();}catch(e){fb();}
+}
+
+/* ===== Eventos ===== */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const A=cur();
+  if(b.id==='add-aluno')addAluno();
+  else if(b.dataset.aluno){DB.atual=b.dataset.aluno;save();TAB='peca';renderAll();window.scrollTo({top:0});}
+  else if(b.dataset.tab)setTab(b.dataset.tab,true);
+  else if(b.dataset.gate&&A){A.gate=b.dataset.gate;if(A.gate==='outra')ITEMS.filter(i=>i.grupo==='peca').forEach(i=>A.nota[i.id]='0');save();renderArea();}
+  else if(b.dataset.k&&A){A.c[b.dataset.k]=b.dataset.o;save();b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));updateAll();}
+  else if(b.dataset.copy){copyText(document.getElementById('txt-'+b.dataset.copy).value);}
+  else if(b.id==='copy-msg'&&A){copyText(msgAluno(A));}
+  else if(b.id==='bar-go')setTab('res',true);
+  else if(b.dataset.zoom)setZoom(zoom+(b.dataset.zoom==='+'?.25:-.25));
+  else if(b.id==='limpar-prova'&&A){
+    if(b.dataset.armed){idbDel(A.id);delete MEM[A.id];renderViewer();}
+    else{b.dataset.armed='1';b.textContent='Toque de novo';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='Remover prova';}},3500);}
+  }
+  else if(b.id==='del-aluno'&&A){
+    if(b.dataset.armed){idbDel(A.id);DB.alunos=DB.alunos.filter(x=>x.id!==A.id);DB.atual=DB.alunos.length?DB.alunos[DB.alunos.length-1].id:null;save();renderAll();window.scrollTo({top:0});}
+    else{b.dataset.armed='1';b.textContent='Toque de novo para excluir '+A.nome;setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='Excluir este aluno';}},3500);}
+  }
+});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='novo-nome')addAluno();});
+document.addEventListener('change',e=>{
+  const el=e.target,A=cur();
+  if(el.id==='file-in'||el.id==='file-in2'){addFiles([...el.files]);el.value='';}
+  else if(el.dataset.nota&&A){A.nota[el.dataset.nota]=el.value;save();updateAll();}
+});
+document.addEventListener('input',e=>{
+  const el=e.target,A=cur();if(!A)return;
+  if(el.dataset.pag!==undefined){A.pag[el.dataset.pag]=el.value;save();refreshTexts(A);}
+  else if(el.dataset.lin!==undefined){A.lin[el.dataset.lin]=el.value;save();refreshTexts(A);}
+  else if(el.dataset.tr!==undefined){A.trecho[el.dataset.tr]=el.value;save();refreshTexts(A);}
+  else if(el.id==='obs'){A.obs=el.value;save();}
+});
+function refreshTexts(A){ITEMS.forEach(it=>{const ta=document.getElementById('txt-'+it.id);if(ta&&status(A,it)==='rec')ta.value=recText(A,it);});}
+
+openIDB().then(renderAll);
+</script>
+</body>
+</html>
